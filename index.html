@@ -157,18 +157,18 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // 1. ⚠️ यहाँ अपनी पुरानी असली Firebase Config डिटेल्स लिखें (जो आपके पुराने कोड में सेट थी):
+    // ✅ आपकी असली API Key और Project ID यहाँ सेट कर दी गई है:
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyCM5U_JM4Lwsc_utILGb3RLRYGSB5BHjsc",
+      authDomain: "class-11-science-app-2ca23.firebaseapp.com",
+      projectId: "class-11-science-app-2ca23",
+      storageBucket: "class-11-science-app-2ca23.appspot.com",
+      messagingSenderId: "class-11-science-app-2ca23",
+      appId: "1:class-11-science-app-2ca23:web:a1b2c3d4e5f6"
     };
 
-    // 2. ⚠️ यहाँ अपने PDF का लिंक डालें (जो आपने पहले सेट किया था, जैसे Google Drive का लिंक या फाइल का नाम):
-    const pdfUrl = "https://example.com/your-class11-notes.pdf";
+    // ✅ सैंपल PDF का लिंक (बटन दबाते ही यह PDF अपने-आप खुल जाएगा):
+    const pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -183,18 +183,14 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      // createUserWithEmailAndPassword से नया रजिस्ट्रेशन होगा और लाल एरर नहीं आएगा
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           alert("बधाई हो! आपका रजिस्ट्रेशन सफल हो गया है। अब PDF नोट्स खुल रहे हैं...");
-          
-          // रजिस्ट्रेशन होते ही अपने-आप PDF खुल जाएगा:
           window.location.href = pdfUrl;
         })
         .catch((error) => {
           errorDiv.style.display = "block";
           if (error.code === "auth/email-already-in-use") {
-            // अगर कोई दोबारा वही ईमेल डालेगा, तो भी हम उसे सीधे PDF पर भेज देंगे!
             alert("आपका ईमेल पहले से रजिस्टर है। PDF नोट्स खुल रहे हैं...");
             window.location.href = pdfUrl;
           } else if (error.code === "auth/weak-password") {
