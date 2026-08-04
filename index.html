@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 11 Science - VIP Portal</title>
     
-    <!-- Boxicons CDN for Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
         
@@ -40,13 +37,7 @@
         .auth-wrapper {
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; padding: 20px; position: relative; z-index: 10;
-            background: linear-gradient(135deg, #0f172a 50%, #ffffff 50%);
         }
-
-        body.theme-dark .auth-wrapper {
-            background: linear-gradient(135deg, #000000 50%, #18191c 50%);
-        }
-
         .vip-auth-card {
             background: var(--card-bg);
             border: 2px solid var(--primary-color);
@@ -55,14 +46,6 @@
             width: 100%; max-width: 390px;
             text-align: center;
         }
-
-        /* ऐप लोगो स्टाइल (लॉगिन कार्ड के ऊपर) */
-        .auth-logo-img {
-            width: 85px; height: 85px; border-radius: 20px; object-fit: cover;
-            margin: 0 auto 15px auto; box-shadow: 0 6px 18px rgba(0, 136, 255, 0.35);
-            border: 2px solid var(--primary-color); display: block;
-        }
-
         .vip-badge {
             display: inline-block; background: var(--primary-color);
             color: #ffffff; font-weight: 800; font-size: 11px; padding: 4px 12px;
@@ -115,13 +98,21 @@
             border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;
         }
 
-        /* बैनर इमेज स्टाइल */
-        .app-banner-image-box { margin: 15px; text-align: center; }
-        .app-banner-image-box img {
-            width: 100%; max-width: 100%; border-radius: 18px;
+        /* आकर्षक नया स्टाइलिश बैनर */
+        .app-banner-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #0088ff 100%);
+            color: white; border-radius: 20px; padding: 22px 18px; margin: 15px; text-align: center;
             box-shadow: 0 8px 25px rgba(0, 136, 255, 0.35);
-            border: 2px solid rgba(255, 255, 255, 0.25);
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
         }
+        .admin-badge-name {
+            background: rgba(255, 255, 255, 0.25); padding: 8px 12px; border-radius: 12px;
+            font-size: 12px; font-weight: 800; letter-spacing: 1px; backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.4); text-transform: uppercase;
+        }
+        .banner-text-box h3 { font-size: 17px; font-weight: 800; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .banner-text-box p { font-size: 11px; opacity: 0.95; font-weight: 500; }
 
         .home-dashboard-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 15px 15px 15px;
@@ -197,9 +188,6 @@
     <!-- 1. REGISTRATION SCREEN -->
     <div id="registration-screen" class="auth-wrapper">
         <div class="vip-auth-card">
-            <!-- ऐप लोगो यहाँ जोड़ा गया है -->
-            <img src="98669.png" alt="App Logo" class="auth-logo-img">
-
             <span class="vip-badge">VIP PORTAL</span>
             <div class="auth-title">Class 11 Science</div>
             <div class="auth-sub">Enter Details to Start App</div>
@@ -222,8 +210,6 @@
                 <select id="reg-board">
                     <option value="JAC Board">JAC Board (Jharkhand)</option>
                     <option value="CBSE Board">CBSE Board</option>
-                    <option value="Bihar Board (BSEB)">Bihar Board (BSEB)</option>
-                    <option value="UP Board">UP Board</option>
                 </select>
             </div>
 
@@ -239,7 +225,6 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span id="app-header-main-title" style="font-size: 18px; font-weight: 800; color: #ffffff;">All Books</span>
                 <div class="header-actions">
-                    <button class="btn-action" onclick="toggleDarkMode()">🌓 Theme</button>
                     <button class="btn-logout" onclick="location.reload()">Logout</button>
                 </div>
             </div>
@@ -254,9 +239,13 @@
 
         <!-- VIEW 1: HOME GRID -->
         <div id="view-home" class="page-section active">
-            <!-- इमेज बैनर -->
-            <div class="app-banner-image-box">
-                <img src="banner.png" alt="Class 11 Science Banner">
+            <div class="app-banner-card">
+                <div class="admin-badge-name"> RATAN </div>
+                <div class="banner-text-box">
+                    <h3>Class 11th Full Books & Notes</h3>
+                    <p>Read Notes, Book PDFs & Work 100% Offline</p>
+                </div>
+                <div class="admin-badge-name">Tanvi</div>
             </div>
 
             <div class="home-dashboard-grid">
@@ -270,7 +259,7 @@
                 </div>
                 <div class="home-dash-card" onclick="toggleDarkMode()">
                     <div class="icon-circle" style="color:#d97706;">☀️</div>
-                    <h4>Theme Toggle</h4>
+                    <h4> dark mode </h4>
                 </div>
                 <div class="home-dash-card" onclick="switchTab('downloads')">
                     <div class="icon-circle" style="color:#16a34a;">📥</div>
