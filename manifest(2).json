@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "class 11 science",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "class 11 science",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "class-11-science-app",
+  "description": "Class 11 Science Full Books, Notes and NCERT Solutions for JAC, CBSE and Bihar Board."
+}
